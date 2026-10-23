@@ -63,7 +63,30 @@ namespace pr34_Markova
 
 		private void CropButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			//если рамка слишком маленькая - ничё не делаем
+			if(SelectionRect.Width < 5 || SelectionRect.Height < 5)
+			{
+				return;
+			}
+			//берём картинку из папки
+			BitmapImage originalImage = MainImage.Source as BitmapImage;
+			if(originalImage == null)
+			{
+				return;
+			}
+			//получаем координаты рамки (округлила до целых)
+			int x = (int)Canvas.GetLeft(SelectionRect);
+			int y = (int)Canvas.GetTop(SelectionRect);
+			int width = (int)SelectionRect.Width;
+			int height = (int)SelectionRect.Height;
+			//прямоугольник для обрезки
+			Int32Rect rect = new Int32Rect(x, y, width, height);
+			//обрезанная картинка
+			CroppedBitmap croppedImage = new CroppedBitmap(originalImage, rect);
+			//показываем картинку обрезанную
+			MainImage.Source = croppedImage;
+			//прячем саму рамку
+			SelectionRect.Visibility = Visibility.Collapsed;
 		}
 	}
 }
